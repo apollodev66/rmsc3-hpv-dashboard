@@ -36,5 +36,4 @@ Thumbs.db
 # Coverage directory used by tools like istanbul
 coverage/
 
-# Ignore firebase.js in src/
-src/firebase.js
+.env
