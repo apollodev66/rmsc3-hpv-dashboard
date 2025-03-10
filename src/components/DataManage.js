@@ -216,7 +216,7 @@ const DataManage = () => {
           </Table>
         </TableContainer>
 
-        <Box mt={3}>
+        <Box mt={3} mb={5}>
           <Button type="submit" variant="contained" color="primary">
             บันทึกข้อมูล
           </Button>
