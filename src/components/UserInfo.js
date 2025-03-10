@@ -8,7 +8,7 @@ const UserInfo = () => {
   const fullname = localStorage.getItem("fullname"); // ดึงชื่อผู้ใช้จาก localStorage
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("1zxcasgr0kergrgkwjeir");
     localStorage.removeItem("fullname"); // ลบข้อมูลผู้ใช้
     navigate("/login"); // ไปหน้า login
   };

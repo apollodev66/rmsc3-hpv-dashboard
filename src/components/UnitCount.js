@@ -11,7 +11,7 @@ import {
   Container
 } from "@mui/material";
 import { months, convertToThaiDate } from "../components/MonthsTH";
-import Header from "./Header"
+import Header from "./Header";
 
 const UnitCount = () => {
   const [totalSamples, setTotalSamples] = useState(0);
@@ -95,76 +95,82 @@ const UnitCount = () => {
     fetchData();
   }, []);
 
+  const formatNumber = (number) => {
+    return number.toLocaleString(); // เพิ่ม , ให้กับจำนวน
+  };
+
   return (
     <Container>
-    <Header />
-    <Box sx={{ width: "100%", padding: 2 }}>
-      <Grid container spacing={2}>
-        {loading ? (
-          <Box display="flex" justifyContent="center" width="100%">
-            <CircularProgress />
-          </Box>
-        ) : (
-          <>
-            {/* ข้อมูลเดือนที่ผ่านมา */}
-            <Grid item xs={12} sm={4}>
-              <Card sx={{ backgroundColor: "#4a90e2", color: "#fff" }}>
-                <CardContent>
-                  <Typography variant="h6">
-                    ข้อมูลเดือนที่ผ่านมา ({convertToThaiDate(previousMonth)})
-                  </Typography>
-                  <Typography variant="h4">
-                    {previousMonthSamples} ตัวอย่าง
-                  </Typography>
-                  <Typography variant="h6">
-                    {previousMonthStrains} ตัวอย่างพบเชื้อ
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+      <Header />
+      <Box sx={{ width: "100%", padding: 2 }}>
+        <Grid container spacing={2}>
+          {loading ? (
+            <Box display="flex" justifyContent="center" width="100%">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <>
+              {/* ข้อมูลเดือนที่ผ่านมา */}
+              <Grid item xs={12} sm={4}>
+                <Card sx={{ backgroundColor: "#4a90e2", color: "#fff", height: '100%' }}>
+                  <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant="h6" sx={{ textAlign: 'left' }}>
+                      ข้อมูลเดือนที่ผ่านมา ({convertToThaiDate(previousMonth)})
+                    </Typography>
+                    <Typography variant="h4" sx={{ textAlign: 'left' }}>
+                      {formatNumber(previousMonthSamples)} ตัวอย่าง
+                    </Typography>
+                    <Typography variant="h6" sx={{ textAlign: 'left' }}>
+                      {formatNumber(previousMonthStrains)} ตัวอย่างพบเชื้อ
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
 
-            {/* ข้อมูลเดือนปัจจุบัน */}
-            <Grid item xs={12} sm={4}>
-              <Card sx={{ backgroundColor: "#f4ae74", color: "#fff" }}>
-                <CardContent>
-                  <Typography variant="h6">
-                    ข้อมูลเดือนปัจจุบัน ({convertToThaiDate(currentMonth)})
-                  </Typography>
-                  {monthlySamples === 0 && monthlyStrains === 0 ? (
-                    <>
-                      <Typography variant="h4">-</Typography>
-                      <Typography variant="h6">กำลังรวบรวมข้อมูล</Typography>
-                    </>
-                  ) : (
-                    <>
-                      <Typography variant="h4">
-                        {monthlySamples} ตัวอย่าง
-                      </Typography>
-                      <Typography variant="h6">
-                        {monthlyStrains} ตัวอย่างพบเชื้อ
-                      </Typography>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
+              {/* ข้อมูลเดือนปัจจุบัน */}
+              <Grid item xs={12} sm={4}>
+                <Card sx={{ backgroundColor: "#f4ae74", color: "#fff", height: '100%' }}>
+                  <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant="h6" sx={{ textAlign: 'left' }}>
+                      ข้อมูลเดือนปัจจุบัน ({convertToThaiDate(currentMonth)})
+                    </Typography>
+                    {monthlySamples === 0 && monthlyStrains === 0 ? (
+                      <>
+                        <Typography variant="h4" sx={{ textAlign: 'left' }}>-</Typography>
+                        <Typography variant="h6" sx={{ textAlign: 'left' }}>กำลังรวบรวมข้อมูล</Typography>
+                      </>
+                    ) : (
+                      <>
+                        <Typography variant="h4" sx={{ textAlign: 'left' }}>
+                          {formatNumber(monthlySamples)} ตัวอย่าง
+                        </Typography>
+                        <Typography variant="h6" sx={{ textAlign: 'left' }}>
+                          {formatNumber(monthlyStrains)} ตัวอย่างพบเชื้อ
+                        </Typography>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
 
-            {/* ข้อมูลทั้งหมด */}
-            <Grid item xs={12} sm={4}>
-              <Card sx={{ backgroundColor: "#7cc0d0", color: "#fff" }}>
-                <CardContent>
-                  <Typography variant="h6">ข้อมูลทั้งหมด</Typography>
-                  <Typography variant="h4">{totalSamples} ตัวอย่าง</Typography>
-                  <Typography variant="h6">
-                    {totalStrains} ตัวอย่างพบเชื้อ
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </>
-        )}
-      </Grid>
-    </Box>
+              {/* ข้อมูลทั้งหมด */}
+              <Grid item xs={12} sm={4}>
+                <Card sx={{ backgroundColor: "#7cc0d0", color: "#fff", height: '100%' }}>
+                  <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant="h6" sx={{ textAlign: 'left' }}>ข้อมูลทั้งหมด</Typography>
+                    <Typography variant="h4" sx={{ textAlign: 'left' }}>
+                      {formatNumber(totalSamples)} ตัวอย่าง
+                    </Typography>
+                    <Typography variant="h6" sx={{ textAlign: 'left' }}>
+                      {formatNumber(totalStrains)} ตัวอย่างพบเชื้อ
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </>
+          )}
+        </Grid>
+      </Box>
     </Container>
   );
 };
