@@ -22,6 +22,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 
+import UserInfo from "./UserInfo";
+
 const strains = [
   "Multiple_HPV_16_18",
   "Multiple_HPV_non_16_18",
@@ -129,8 +131,9 @@ const DataManage = () => {
 
   return (
     <Container>
+      <UserInfo />
       <br />
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h6" gutterBottom>
         เพิ่ม/แก้ไข ข้อมูลการตรวจหาเชื้อ
       </Typography>
       <form onSubmit={handleSubmit}>

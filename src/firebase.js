@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 
 // ใช้ process.env เพื่อดึงค่าจากไฟล์ .env
 const firebaseConfig = {
@@ -13,4 +13,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+const db = getFirestore(app);
+
+// export db ตัวเดียว
+export { db, collection, getDocs, query, where };
