@@ -8,8 +8,10 @@ import {
   CircularProgress,
   Box,
   Grid,
+  Container
 } from "@mui/material";
 import { months, convertToThaiDate } from "../components/MonthsTH";
+import Header from "./Header"
 
 const UnitCount = () => {
   const [totalSamples, setTotalSamples] = useState(0);
@@ -94,6 +96,8 @@ const UnitCount = () => {
   }, []);
 
   return (
+    <Container>
+    <Header />
     <Box sx={{ width: "100%", padding: 2 }}>
       <Grid container spacing={2}>
         {loading ? (
@@ -161,6 +165,7 @@ const UnitCount = () => {
         )}
       </Grid>
     </Box>
+    </Container>
   );
 };
 

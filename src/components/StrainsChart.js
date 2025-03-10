@@ -22,7 +22,6 @@ import {
   LabelList,
 } from "recharts";
 
-
 const strains = [
   "Multiple_HPV_16_18",
   "Multiple_HPV_non_16_18",
@@ -172,6 +171,7 @@ const StrainsChart = () => {
 
   return (
     <Container>
+        
       <br />
       <Typography variant="h5" gutterBottom>
         ข้อมูลแยกตามสายพันธ์ุ

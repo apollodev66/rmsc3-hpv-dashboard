@@ -1,13 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";  // ✅ ใช้ createRoot() แทน
-import App from "./App";
-import "@fontsource/poppins";
-import { CssBaseline } from "@mui/material";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
+import App from './App';
+import '@fontsource/poppins';
+import { CssBaseline } from '@mui/material';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <CssBaseline />
-    <App />
+    <Router>  {/* ใช้ Router ที่นี่เท่านั้น */}
+      <App />
+    </Router>
   </React.StrictMode>
 );
