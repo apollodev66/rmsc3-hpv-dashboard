@@ -21,7 +21,7 @@ import {
   Backdrop,
   CircularProgress,
 } from "@mui/material";
-
+import { convertToStrainsNameFormat } from "../components/StrainsNameFormat";
 import UserInfo from "./UserInfo";
 
 const strains = [
@@ -197,7 +197,7 @@ const DataManage = () => {
             <TableBody>
               {strains.map((strain) => (
                 <TableRow key={strain}>
-                  <TableCell>{strain}</TableCell>
+                  <TableCell>{convertToStrainsNameFormat(strain)}</TableCell>
                   <TableCell align="center">
                     <TextField
                       label="จำนวน"

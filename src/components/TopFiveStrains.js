@@ -13,6 +13,10 @@ import {
   InputLabel,
   CircularProgress,
   Box,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
 } from "@mui/material";
 import {
   BarChart,
@@ -26,6 +30,7 @@ import {
 } from "recharts";
 
 import { convertToThaiDate } from "../components/MonthsTH";
+import { convertToStrainsNameFormat } from "../components/StrainsNameFormat";
 
 const strains = [
   "Multiple_HPV_16_18",
@@ -83,6 +88,7 @@ const TopFiveStrains = () => {
   const [dataMonth, setDataMonth] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(months[0]);
   const [loading, setLoading] = useState(false);
+  const [isListView, setIsListView] = useState(false);
 
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
@@ -150,7 +156,6 @@ const TopFiveStrains = () => {
           value={selectedMonth}
           onChange={handleMonthChange}
           label="เลือกเดือน"
-          fullWidth
         >
           {months.map((month) => (
             <MenuItem key={month} value={month}>
@@ -159,6 +164,16 @@ const TopFiveStrains = () => {
           ))}
         </Select>
       </FormControl>
+
+      {/* ปุ่มสลับโหมดการแสดงผล */}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => setIsListView(!isListView)}
+        sx={{ mb: 2 }}
+      >
+        {isListView ? "แสดงเป็นกราฟ" : "แสดงเป็นรายการ"}
+      </Button>
 
       {loading ? (
         <Box
@@ -181,6 +196,18 @@ const TopFiveStrains = () => {
                   <Typography color="textSecondary">
                     กำลังรวบรวมข้อมูล
                   </Typography>
+                ) : isListView ? (
+                  <List>
+                    {dataTotal.map((item, index) => (
+                      <ListItem key={index}>
+                        <ListItemText
+                          primary={`${convertToStrainsNameFormat(item.name)}: ${
+                            item.value
+                          } ครั้ง`}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
                 ) : (
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={dataTotal}>
@@ -190,7 +217,7 @@ const TopFiveStrains = () => {
                         angle={-45}
                         textAnchor="end"
                         height={90}
-                        style={{ fontFamily: "K2D, sans-serif" }}
+                        tickFormatter={convertToStrainsNameFormat}
                       />
                       <YAxis />
                       <Tooltip />
@@ -206,7 +233,6 @@ const TopFiveStrains = () => {
                           position="top"
                           fill="#000"
                           fontSize={12}
-                          style={{ fontFamily: "K2D, sans-serif" }}
                         />
                       </Bar>
                     </BarChart>
@@ -216,16 +242,29 @@ const TopFiveStrains = () => {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} mb={5}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  5 อันดับสายพันธุ์ที่ถูกพบมากที่สุดในเดือน {convertToThaiDate(selectedMonth)}
+                  5 อันดับสายพันธุ์ที่ถูกพบมากที่สุดในเดือน{" "}
+                  {convertToThaiDate(selectedMonth)}
                 </Typography>
                 {dataMonth.length === 0 ? (
                   <Typography color="textSecondary">
                     กำลังรวบรวมข้อมูล
                   </Typography>
+                ) : isListView ? (
+                  <List>
+                    {dataMonth.map((item, index) => (
+                      <ListItem key={index}>
+                        <ListItemText
+                          primary={`${convertToStrainsNameFormat(item.name)}: ${
+                            item.value
+                          } ครั้ง`}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
                 ) : (
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={dataMonth}>
@@ -235,7 +274,7 @@ const TopFiveStrains = () => {
                         angle={-45}
                         textAnchor="end"
                         height={90}
-                        style={{ fontFamily: "K2D, sans-serif" }}
+                        tickFormatter={convertToStrainsNameFormat}
                       />
                       <YAxis />
                       <Tooltip />
@@ -251,7 +290,6 @@ const TopFiveStrains = () => {
                           position="top"
                           fill="#000"
                           fontSize={12}
-                          style={{ fontFamily: "K2D, sans-serif" }}
                         />
                       </Bar>
                     </BarChart>

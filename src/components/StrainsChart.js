@@ -21,6 +21,7 @@ import {
   Cell,
   LabelList,
 } from "recharts";
+import { convertToStrainsNameFormat } from "../components/StrainsNameFormat";
 
 const strains = [
   "Multiple_HPV_16_18",
@@ -222,6 +223,7 @@ const StrainsChart = () => {
               textAnchor="end"
               height={90}
               style={{ fontFamily: "K2D, sans-serif" }}
+              tickFormatter={convertToStrainsNameFormat}
             />
             <YAxis />
             <Tooltip />
@@ -238,6 +240,7 @@ const StrainsChart = () => {
                 fill="#000"
                 fontSize={12}
                 style={{ fontFamily: "K2D, sans-serif" }}
+                tickFormatter={convertToStrainsNameFormat}
               />
             </Bar>
           </BarChart>
