@@ -7,6 +7,7 @@ import StackedBarChart from "./components/StackedBarChart";
 import UnitCount from "./components/UnitCount";
 import HeadBar from "./components/HeadBar";
 import Login from "./components/Login";
+import TopFiveStrains from "./components/TopFiveStrains";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Container } from "@mui/material";
 
@@ -21,7 +22,7 @@ function App() {
       <Container>
         <br />
         <Routes>
-          <Route path="/" element={<><UnitCount /><StrainsChart /><StackedBarChart /></>} />
+          <Route path="/" element={<><UnitCount /><StrainsChart /><StackedBarChart /><TopFiveStrains /></>} />
           <Route path="/login" element={<Login />} />
           <Route path="/data-manage" element={<ProtectedRoute><DataManage /></ProtectedRoute>} />
         </Routes>
