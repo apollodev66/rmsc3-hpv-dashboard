@@ -25,5 +25,4 @@ export const strains = [
   
   // ตัวอย่างการใช้งาน
   const formattedStrains = strains.map(convertToStrainsNameFormat);
-  console.log(formattedStrains);
   
