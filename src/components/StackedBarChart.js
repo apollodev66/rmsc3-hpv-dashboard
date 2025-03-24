@@ -12,7 +12,7 @@ import {
   LabelList,
   ResponsiveContainer,
 } from "recharts";
-import { Select, MenuItem, FormControl, InputLabel, Typography, CircularProgress, Box } from "@mui/material";
+import { Select, MenuItem, FormControl, InputLabel, Typography, CircularProgress, Box, Grid } from "@mui/material";
 
 const StackedBarChart = () => {
   const [labsData, setLabsData] = useState([]);
@@ -73,22 +73,26 @@ const StackedBarChart = () => {
   return (
     <div style={{ width: "100%", padding: "20px" }}>
       <Typography variant="h5" gutterBottom>ข้อมูลรายเดือนในแต่ละศูนย์ฯ</Typography>
-
-      <FormControl fullWidth margin="normal">
-        <InputLabel>เลือกเดือน</InputLabel>
-        <Select value={selectedMonth} onChange={handleMonthChange} label="เลือกเดือน" fullWidth>
-          {months.map((monthItem) => (
-            <MenuItem key={monthItem} value={monthItem}>{monthItem}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
+      <Grid container spacing={2} sx={{ marginBottom: 2, justifyContent: "flex-end" }}>
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>เลือกเดือน</InputLabel>
+            <Select value={selectedMonth} onChange={handleMonthChange} label="เลือกเดือน">
+              {months.map((month) => (
+                <MenuItem key={month} value={month}>
+                  {month}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height={450}>
           <CircularProgress />
         </Box>
       ) : (
-        <ResponsiveContainer width="100%" height={450}>
+        <ResponsiveContainer width="100%" height={350}>
           <ComposedChart data={labsData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 

@@ -21,8 +21,9 @@ import {
   Backdrop,
   CircularProgress,
 } from "@mui/material";
-import { convertToStrainsNameFormat } from "../components/StrainsNameFormat";
+import { convertToStrainsNameFormat } from "./StrainsNameFormat";
 import UserInfo from "./UserInfo";
+import ExcelUploader from "./ExcelUploader";
 
 const strains = [
   "Multiple_HPV_16_18",
@@ -65,7 +66,7 @@ const labs = [
 
 const months = ["2024-10","2024-11","2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05"];
 
-const DataManage = () => {
+const InsertData = () => {
   const [month, setMonth] = useState("");
   const [lab, setLab] = useState("");
   const [totalSamples, setTotalSamples] = useState("");
@@ -237,4 +238,4 @@ const DataManage = () => {
   );
 };
 
-export default DataManage;
+export default InsertData;

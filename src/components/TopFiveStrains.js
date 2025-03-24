@@ -187,17 +187,31 @@ const TopFiveStrains = () => {
       ) : (
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
+            <Card sx={{ height: "100%" }}>
+              <CardContent
+                sx={{
+                  minHeight: "400px",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <Typography variant="h6" gutterBottom>
                   5 อันดับสายพันธุ์ที่ถูกพบมากที่สุดทั้งหมด
                 </Typography>
                 {dataTotal.length === 0 ? (
-                  <Typography color="textSecondary">
+                  <Typography
+                    color="textSecondary"
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
                     กำลังรวบรวมข้อมูล
                   </Typography>
                 ) : isListView ? (
-                  <List>
+                  <List sx={{ flexGrow: 1 }}>
                     {dataTotal.map((item, index) => (
                       <ListItem key={index}>
                         <ListItemText
@@ -209,52 +223,68 @@ const TopFiveStrains = () => {
                     ))}
                   </List>
                 ) : (
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={dataTotal}>
-                      <XAxis
-                        dataKey="name"
-                        tick={{ fontSize: 10 }}
-                        angle={-45}
-                        textAnchor="end"
-                        height={90}
-                        tickFormatter={convertToStrainsNameFormat}
-                      />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="value">
-                        {dataTotal.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={colors[entry.name] || "#003366"}
-                          />
-                        ))}
-                        <LabelList
-                          dataKey="value"
-                          position="top"
-                          fill="#000"
-                          fontSize={12}
+                  <Box sx={{ flexGrow: 1 }}>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={dataTotal}>
+                        <XAxis
+                          dataKey="name"
+                          tick={{ fontSize: 10 }}
+                          angle={-45}
+                          textAnchor="end"
+                          height={90}
+                          tickFormatter={convertToStrainsNameFormat}
                         />
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="value">
+                          {dataTotal.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={colors[entry.name] || "#003366"}
+                            />
+                          ))}
+                          <LabelList
+                            dataKey="value"
+                            position="top"
+                            fill="#000"
+                            fontSize={12}
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </Box>
                 )}
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={6} mb={5}>
-            <Card>
-              <CardContent>
+          <Grid item xs={12} md={6}>
+            <Card sx={{ height: "100%" }}>
+              <CardContent
+                sx={{
+                  minHeight: "400px",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <Typography variant="h6" gutterBottom>
                   5 อันดับสายพันธุ์ที่ถูกพบมากที่สุดในเดือน{" "}
                   {convertToThaiDate(selectedMonth)}
                 </Typography>
                 {dataMonth.length === 0 ? (
-                  <Typography color="textSecondary">
+                  <Typography
+                    color="textSecondary"
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
                     กำลังรวบรวมข้อมูล
                   </Typography>
                 ) : isListView ? (
-                  <List>
+                  <List sx={{ flexGrow: 1 }}>
                     {dataMonth.map((item, index) => (
                       <ListItem key={index}>
                         <ListItemText
@@ -266,34 +296,36 @@ const TopFiveStrains = () => {
                     ))}
                   </List>
                 ) : (
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={dataMonth}>
-                      <XAxis
-                        dataKey="name"
-                        tick={{ fontSize: 10 }}
-                        angle={-45}
-                        textAnchor="end"
-                        height={90}
-                        tickFormatter={convertToStrainsNameFormat}
-                      />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="value">
-                        {dataMonth.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={colors[entry.name] || "#003366"}
-                          />
-                        ))}
-                        <LabelList
-                          dataKey="value"
-                          position="top"
-                          fill="#000"
-                          fontSize={12}
+                  <Box sx={{ flexGrow: 1 }}>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={dataMonth}>
+                        <XAxis
+                          dataKey="name"
+                          tick={{ fontSize: 10 }}
+                          angle={-45}
+                          textAnchor="end"
+                          height={90}
+                          tickFormatter={convertToStrainsNameFormat}
                         />
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="value">
+                          {dataMonth.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={colors[entry.name] || "#003366"}
+                            />
+                          ))}
+                          <LabelList
+                            dataKey="value"
+                            position="top"
+                            fill="#000"
+                            fontSize={12}
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </Box>
                 )}
               </CardContent>
             </Card>

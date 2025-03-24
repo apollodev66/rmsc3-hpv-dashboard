@@ -2,26 +2,22 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import {
-  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Select,
   MenuItem,
-  CircularProgress,
-  Box,
-  Typography,
   FormControl,
   InputLabel,
-  Grid
+  Typography,
+  CircularProgress,
+  Box,
+  Grid,
 } from "@mui/material";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-  LabelList,
-} from "recharts";
 import { convertToStrainsNameFormat } from "../components/StrainsNameFormat";
 
 const strains = [
@@ -63,35 +59,22 @@ const labs = [
   "ศวก. 12",
   "ศวก. 12-1",
 ];
-const months = ["ทั้งหมด", "2024-10","2024-11","2024-12","2025-01", "2025-02", "2025-03"];
 
-// กำหนดสีของแต่ละสายพันธุ์
-const colors = {
-  Multiple_HPV_16_18: "#b4e4e8",
-  Multiple_HPV_non_16_18: "#ffc498",
-  Multiple_HPV_16: "#afddba",
-  Multiple_HPV_18: "#fce49a",
-  SINGLE_16: "#f7b5af",
-  SINGLE_18: "#b3cffa",
-  SINGLE_31: "#7fd1d6",
-  SINGLE_33: "#fe994c",
-  SINGLE_35: "#70c387",
-  SINGLE_39: "#fdd04e",
-  SINGLE_45: "#f07b72",
-  SINGLE_51: "#7baaf7",
-  SINGLE_52: "#46bcc7",
-  SINGLE_56: "#ff6d01",
-  SINGLE_58: "#35a953",
-  SINGLE_59: "#fbbc04",
-  SINGLE_66: "#ea4335",
-  SINGLE_68: "#7bb7e2",
-};
+const months = [
+  "ทั้งหมด",
+  "2024-10",
+  "2024-11",
+  "2024-12",
+  "2025-01",
+  "2025-02",
+  "2025-03",
+];
 
-const StrainsChart = () => {
+const StrainsTable = () => {
   const [data, setData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(months[0]);
   const [selectedLab, setSelectedLab] = useState("ทั้งหมด");
-  const [loading, setLoading] = useState(false); // สถานะการโหลดข้อมูล
+  const [loading, setLoading] = useState(false);
 
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
@@ -103,16 +86,15 @@ const StrainsChart = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // เริ่มโหลดข้อมูล
+      setLoading(true);
       let aggregatedData = {};
-  
+
       if (selectedMonth === "ทั้งหมด") {
-        // วนลูปดึงข้อมูลจากทุกเดือน (ยกเว้น "ทั้งหมด")
         for (const month of months.slice(1)) {
           if (selectedLab === "ทั้งหมด") {
             const labsRef = collection(db, `hpv_records/${month}/Labs`);
             const querySnapshot = await getDocs(labsRef);
-  
+
             querySnapshot.forEach((docSnap) => {
               const labData = docSnap.data();
               strains.forEach((strain) => {
@@ -123,7 +105,7 @@ const StrainsChart = () => {
           } else {
             const labRef = doc(db, `hpv_records/${month}/Labs`, selectedLab);
             const docSnap = await getDoc(labRef);
-  
+
             if (docSnap.exists()) {
               const labData = docSnap.data();
               strains.forEach((strain) => {
@@ -137,7 +119,7 @@ const StrainsChart = () => {
         if (selectedLab === "ทั้งหมด") {
           const labsRef = collection(db, `hpv_records/${selectedMonth}/Labs`);
           const querySnapshot = await getDocs(labsRef);
-  
+
           querySnapshot.forEach((docSnap) => {
             const labData = docSnap.data();
             strains.forEach((strain) => {
@@ -146,9 +128,13 @@ const StrainsChart = () => {
             });
           });
         } else {
-          const labRef = doc(db, `hpv_records/${selectedMonth}/Labs`, selectedLab);
+          const labRef = doc(
+            db,
+            `hpv_records/${selectedMonth}/Labs`,
+            selectedLab
+          );
           const docSnap = await getDoc(labRef);
-  
+
           if (docSnap.exists()) {
             const labData = docSnap.data();
             strains.forEach((strain) => {
@@ -157,32 +143,34 @@ const StrainsChart = () => {
           }
         }
       }
-  
-      const chartData = strains.map((strain) => ({
-        name: strain,
+
+      const tableData = strains.map((strain) => ({
+        strain: convertToStrainsNameFormat(strain),
         value: aggregatedData[strain] || 0,
       }));
-  
-      setData(chartData);
-      setLoading(false); // หยุดโหลดข้อมูล
+
+      setData(tableData);
+      setLoading(false);
     };
-  
+
     fetchData();
   }, [selectedMonth, selectedLab]);
-  
 
   return (
-    <Container>
-        
-      <br />
+    <Box sx={{ width: "100%", padding: "20px" }}>
       <Typography variant="h5" gutterBottom>
-        ข้อมูลแยกตามสายพันธ์ุ
+        ข้อมูลแยกตามสายพันธุ์
       </Typography>
+
       <Grid container spacing={2} sx={{ marginBottom: 2 }}>
         <Grid item xs={12} md={6}>
           <FormControl fullWidth>
             <InputLabel>เลือกเดือน</InputLabel>
-            <Select value={selectedMonth} onChange={handleMonthChange} label="เลือกเดือน">
+            <Select
+              value={selectedMonth}
+              onChange={handleMonthChange}
+              label="เลือกเดือน"
+            >
               {months.map((month) => (
                 <MenuItem key={month} value={month}>
                   {month}
@@ -194,7 +182,11 @@ const StrainsChart = () => {
         <Grid item xs={12} md={6}>
           <FormControl fullWidth>
             <InputLabel>เลือกหน่วยงาน</InputLabel>
-            <Select value={selectedLab} onChange={handleLabChange} label="เลือกหน่วยงาน">
+            <Select
+              value={selectedLab}
+              onChange={handleLabChange}
+              label="เลือกหน่วยงาน"
+            >
               {labs.map((lab) => (
                 <MenuItem key={lab} value={lab}>
                   {lab}
@@ -204,51 +196,47 @@ const StrainsChart = () => {
           </FormControl>
         </Grid>
       </Grid>
-      {/* แสดง CircularProgress ขณะโหลดข้อมูล */}
+
       {loading ? (
         <Box
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height={400}
+          height={300}
         >
           <CircularProgress />
         </Box>
       ) : (
-        <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={data}>
-            <XAxis
-              dataKey="name"
-              tick={{ fontSize: 10 }}
-              angle={-45}
-              textAnchor="end"
-              height={90}
-              style={{ fontFamily: "K2D, sans-serif" }}
-              tickFormatter={convertToStrainsNameFormat}
-            />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" radius={[5, 5, 0, 0]}>
-              {data.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={colors[entry.name] || "#003366"}
-                />
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#fbbc04" }}>
+                <TableCell sx={{ color: "#000", fontWeight: "bold" }}>
+                  สายพันธุ์
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ color: "#000", fontWeight: "bold" }}
+                >
+                  จำนวน
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((row) => (
+                <TableRow key={row.strain}>
+                  <TableCell>{row.strain}</TableCell>
+                  <TableCell align="right" sx={{ backgroundColor: "#fce49a" }}>
+                    {row.value}
+                  </TableCell>
+                </TableRow>
               ))}
-              <LabelList
-                dataKey="value"
-                position="top"
-                fill="#000"
-                fontSize={12}
-                style={{ fontFamily: "K2D, sans-serif" }}
-                tickFormatter={convertToStrainsNameFormat}
-              />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </Container>
+    </Box>
   );
 };
 
-export default StrainsChart;
+export default StrainsTable;
