@@ -12,6 +12,7 @@ import HeadBar from "./components/HeadBar";
 import Login from "./components/Login";
 import TopFiveStrains from "./components/TopFiveStrains";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NotFound from "./components/NotFound";
 
 const theme = createTheme({
   typography: { fontFamily: "K2D, sans-serif" },
@@ -64,6 +65,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* เพิ่ม Route สำหรับหน้าที่ไม่พบ */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Box>
       </Box>

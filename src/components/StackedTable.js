@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 
 import { convertToThaiDate } from "../components/MonthsTH";
+import { convertToRMScNameFormat } from "../components/RMScNameFormat";
 
 const StackedTable = () => {
   const [labsData, setLabsData] = useState([]);
@@ -98,10 +99,7 @@ const StackedTable = () => {
   }, [selectedMonth]);
 
   // ฟังก์ชันเพื่อกำหนดสีพื้นหลังของแถว
-  const getRowColor = (index) => {
-    const colors = ["#fce49a"];
-    return colors[index % colors.length];
-  };
+  const rowColors = ["#ffffff", "#f5f5f5"];
 
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
@@ -109,20 +107,24 @@ const StackedTable = () => {
         ข้อมูลรายเดือนในแต่ละศูนย์ฯ
       </Typography>
 
- <Grid container spacing={2} sx={{ marginBottom: 2 }}>
-        <Grid item xs={12} md={6}>
-          <FormControl fullWidth>
-            <InputLabel>เลือกเดือน</InputLabel>
-            <Select value={selectedMonth} onChange={handleMonthChange} label="เลือกเดือน">
-              {months.map((month) => (
-                <MenuItem key={month} value={month}>
-                  {convertToThaiDate(month)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+      <Grid container spacing={2} sx={{ marginBottom: 2 }}>
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel>เลือกเดือน</InputLabel>
+                  <Select
+                    value={selectedMonth}
+                    onChange={handleMonthChange}
+                    label="เลือกเดือน"
+                  >
+                    {months.map((month) => (
+                      <MenuItem key={month} value={month}>
+                        {convertToThaiDate(month)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
 
       {loading ? (
         <Box
@@ -131,39 +133,57 @@ const StackedTable = () => {
           alignItems="center"
           height={300}
         >
-          <CircularProgress />
+          <CircularProgress sx={{ color: "#1976d2" }} />
         </Box>
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer 
+          component={Paper}
+          sx={{ 
+            border: '1px solid #e0e0e0',
+            borderRadius: '8px',
+            boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)'
+          }}
+        >
           <Table>
             <TableHead>
-              <TableRow sx={{ backgroundColor: "#fbbc04" }}>
-                <TableCell sx={{ color: "#000", fontWeight: "bold" }}>
-                  ศูนย์
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ color: "#000", fontWeight: "bold" }}
-                >
-                  ตัวอย่างทั้งหมด
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ color: "#000", fontWeight: "bold" }}
-                >
-                  ตัวอย่างที่พบเชื้อความเสี่ยงสูง
-                </TableCell>
+              <TableRow sx={{ 
+                backgroundColor: "#1976d2",
+                "& th": {
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  color: '#ffffff'
+                }
+              }}>
+                <TableCell>ลำดับ</TableCell>
+                <TableCell>ศูนย์</TableCell>
+                <TableCell align="right">ตัวอย่างทั้งหมด</TableCell>
+                <TableCell align="right">ตัวอย่างที่พบเชื้อความเสี่ยงสูง</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {labsData.map((lab, index) => (
                 <TableRow
                   key={lab.labName}
-                  sx={{ backgroundColor: getRowColor(index) }}
+                  sx={{ 
+                    backgroundColor: rowColors[index % rowColors.length],
+                    '&:hover': {
+                      backgroundColor: '#e3f2fd'
+                    },
+                    '&:last-child td': {
+                      borderBottom: 'none'
+                    }
+                  }}
                 >
-                  <TableCell>{lab.labName}</TableCell>
-                  <TableCell align="right">{lab.totalSamples}</TableCell>
-                  <TableCell align="right">{lab.totalStrains}</TableCell>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell sx={{ fontWeight: '500' }}>
+                    {convertToRMScNameFormat(lab.labName)}
+                  </TableCell>
+                  <TableCell align="right" sx={{ color: '#1976d2', fontWeight: '500' }}>
+                    {lab.totalSamples.toLocaleString()}
+                  </TableCell>
+                  <TableCell align="right" sx={{ color: '#d32f2f', fontWeight: '500' }}>
+                    {lab.totalStrains.toLocaleString()}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

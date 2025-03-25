@@ -13,11 +13,15 @@ import {
   InputLabel,
   CircularProgress,
   Box,
-  List,
-  ListItem,
-  ListItemText,
   ToggleButton,
   ToggleButtonGroup,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import {
   BarChart,
@@ -177,40 +181,44 @@ const TopFiveStrains = () => {
         5 อันดับสายพันธุ์ที่ถูกพบมากที่สุด
       </Typography>
 
-      <FormControl fullWidth margin="normal">
-        <InputLabel>เลือกเดือน</InputLabel>
-        <Select
-          value={selectedMonth}
-          onChange={handleMonthChange}
-          label="เลือกเดือน"
-        >
-          {months.map((month) => (
-            <MenuItem key={month} value={month}>
-              {convertToThaiDate(month)}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      {/* ปุ่มสลับโหมดการแสดงผลแบบไอคอน */}
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-        <ToggleButtonGroup
-          value={viewMode}
-          exclusive
-          onChange={handleViewModeChange}
-          aria-label="โหมดการแสดงผล"
-        >
-          <ToggleButton value="bar" aria-label="กราฟแท่ง">
-            <BarChartIcon />
-          </ToggleButton>
-          <ToggleButton value="pie" aria-label="กราฟวงกลม">
-            <PieChartIcon />
-          </ToggleButton>
-          <ToggleButton value="list" aria-label="รายการ">
-            <ListIcon />
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
+      <Grid container spacing={2} sx={{ marginBottom: 2 }}>
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>เลือกเดือน</InputLabel>
+            <Select
+              value={selectedMonth}
+              onChange={handleMonthChange}
+              label="เลือกเดือน"
+            >
+              {months.map((month) => (
+                <MenuItem key={month} value={month}>
+                  {convertToThaiDate(month)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+            <ToggleButtonGroup
+              value={viewMode}
+              exclusive
+              onChange={handleViewModeChange}
+              aria-label="โหมดการแสดงผล"
+            >
+              <ToggleButton value="bar" aria-label="กราฟแท่ง">
+                <BarChartIcon />
+              </ToggleButton>
+              <ToggleButton value="pie" aria-label="กราฟวงกลม">
+                <PieChartIcon />
+              </ToggleButton>
+              <ToggleButton value="list" aria-label="รายการ">
+                <ListIcon />
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
+        </Grid>
+      </Grid>
 
       {loading ? (
         <Box
@@ -222,10 +230,10 @@ const TopFiveStrains = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {/* การแสดงผลสำหรับเดือนที่เลือก */}
           <Grid item xs={12} md={6}>
-            <Card sx={{ height: "100%" }}>
+            <Card sx={{ height: 'auto'}}>
               <CardContent
                 sx={{
                   minHeight: "400px",
@@ -233,7 +241,7 @@ const TopFiveStrains = () => {
                   flexDirection: "column",
                 }}
               >
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom sx={{ fontSize: "1rem" }}>
                   5 อันดับสายพันธุ์ที่ถูกพบมากที่สุดในเดือน{" "}
                   {convertToThaiDate(selectedMonth)}
                 </Typography>
@@ -250,17 +258,73 @@ const TopFiveStrains = () => {
                     กำลังรวบรวมข้อมูล
                   </Typography>
                 ) : viewMode === "list" ? (
-                  <List sx={{ flexGrow: 1 }}>
-                    {dataMonth.map((item, index) => (
-                      <ListItem key={index}>
-                        <ListItemText
-                          primary={`${convertToStrainsNameFormat(item.name)}: ${
-                            item.value
-                          } ครั้ง`}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
+                  <TableContainer
+                    component={Paper}
+                    sx={{ maxHeight: 300, mt: 2 }}
+                  >
+                    <Table
+                      size="small"
+                      stickyHeader
+                      aria-label="ตารางแสดงผลลัพธ์รายเดือน"
+                    >
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            sx={{
+                              fontWeight: "bold",
+                              backgroundColor: "primary.main",
+                              color: "primary.contrastText",
+                            }}
+                          >
+                            ลำดับ
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontWeight: "bold",
+                              backgroundColor: "primary.main",
+                              color: "primary.contrastText",
+                            }}
+                          >
+                            สายพันธุ์ HPV
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{
+                              fontWeight: "bold",
+                              backgroundColor: "primary.main",
+                              color: "primary.contrastText",
+                            }}
+                          >
+                            จำนวนตัวอย่าง
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {dataMonth.map((item, index) => (
+                          <TableRow
+                            key={index}
+                            hover
+                            sx={{
+                              "&:nth-of-type(odd)": {
+                                backgroundColor: "action.hover",
+                              },
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {index + 1}
+                            </TableCell>
+                            <TableCell>
+                              {convertToStrainsNameFormat(item.name)}
+                            </TableCell>
+                            <TableCell align="right">
+                              {item.value.toLocaleString()}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 ) : viewMode === "pie" ? (
                   <Box sx={{ flexGrow: 1 }}>
                     <ResponsiveContainer width="100%" height={300}>
@@ -326,7 +390,7 @@ const TopFiveStrains = () => {
 
           {/* การแสดงผลสำหรับข้อมูลทั้งหมด */}
           <Grid item xs={12} md={6}>
-            <Card sx={{ height: "100%" }}>
+            <Card sx={{ height: 'auto' }}>
               <CardContent
                 sx={{
                   minHeight: "400px",
@@ -334,7 +398,7 @@ const TopFiveStrains = () => {
                   flexDirection: "column",
                 }}
               >
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom sx={{ fontSize: "1rem" }}>
                   5 อันดับสายพันธุ์ที่ถูกพบมากที่สุดทั้งหมด
                 </Typography>
                 {dataTotal.length === 0 ? (
@@ -350,17 +414,57 @@ const TopFiveStrains = () => {
                     กำลังรวบรวมข้อมูล
                   </Typography>
                 ) : viewMode === "list" ? (
-                  <List sx={{ flexGrow: 1 }}>
-                    {dataTotal.map((item, index) => (
-                      <ListItem key={index}>
-                        <ListItemText
-                          primary={`${convertToStrainsNameFormat(item.name)}: ${
-                            item.value
-                          } ครั้ง`}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
+                  <TableContainer component={Paper} sx={{ maxHeight: 300 , mt: 2}}>
+                    <Table
+                      stickyHeader
+                      size="small"
+                      aria-label="ตารางแสดงผลลัพธ์"
+                    >
+                       <TableHead>
+                        <TableRow>
+                          <TableCell
+                            sx={{
+                              fontWeight: "bold",
+                              backgroundColor: "primary.main",
+                              color: "primary.contrastText",
+                            }}
+                          >
+                            ลำดับ
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontWeight: "bold",
+                              backgroundColor: "primary.main",
+                              color: "primary.contrastText",
+                            }}
+                          >
+                            สายพันธุ์ HPV
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{
+                              fontWeight: "bold",
+                              backgroundColor: "primary.main",
+                              color: "primary.contrastText",
+                            }}
+                          >
+                            จำนวนตัวอย่าง
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {dataTotal.map((item, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>
+                              {convertToStrainsNameFormat(item.name)} 
+                            </TableCell>
+                            <TableCell align="right">{item.value}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 ) : viewMode === "pie" ? (
                   <Box sx={{ flexGrow: 1 }}>
                     <ResponsiveContainer width="100%" height={300}>
