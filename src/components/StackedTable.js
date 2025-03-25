@@ -19,6 +19,8 @@ import {
   Grid,
 } from "@mui/material";
 
+import { convertToThaiDate } from "../components/MonthsTH";
+
 const StackedTable = () => {
   const [labsData, setLabsData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("ทั้งหมด");
@@ -114,7 +116,7 @@ const StackedTable = () => {
             <Select value={selectedMonth} onChange={handleMonthChange} label="เลือกเดือน">
               {months.map((month) => (
                 <MenuItem key={month} value={month}>
-                  {month}
+                  {convertToThaiDate(month)}
                 </MenuItem>
               ))}
             </Select>

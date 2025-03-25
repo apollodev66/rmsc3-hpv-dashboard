@@ -13,6 +13,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Select, MenuItem, FormControl, InputLabel, Typography, CircularProgress, Box, Grid } from "@mui/material";
+import { convertToThaiDate } from "../components/MonthsTH";
 
 const StackedBarChart = () => {
   const [labsData, setLabsData] = useState([]);
@@ -80,7 +81,7 @@ const StackedBarChart = () => {
             <Select value={selectedMonth} onChange={handleMonthChange} label="เลือกเดือน">
               {months.map((month) => (
                 <MenuItem key={month} value={month}>
-                  {month}
+                  {convertToThaiDate(month)}
                 </MenuItem>
               ))}
             </Select>
