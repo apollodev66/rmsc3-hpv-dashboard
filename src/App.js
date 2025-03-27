@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, CssBaseline } from "@mui/material"; // Added CssBaseline here
 import StrainsChart from "./components/StrainsChart";
 import DataManage from "./pages/DataManage";
 import StackedBarChart from "./components/StackedBarChart";
@@ -14,22 +14,12 @@ import TopFiveStrains from "./components/TopFiveStrains";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PreviewPage from "./pages/PreviewPage";
 import NotFound from "./components/NotFound";
-
-const theme = createTheme({
-  typography: { fontFamily: "K2D, sans-serif" },
-  palette: {
-    primary: {
-      main: "#1976d2",
-    },
-    secondary: {
-      main: "#dc004e",
-    },
-  },
-});
+import theme from './theme';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline /> {/* This applies the theme styles including scrollbar customization */}
       <Box
         sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
@@ -68,7 +58,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/preview-page"
               element={
@@ -77,7 +66,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Box>

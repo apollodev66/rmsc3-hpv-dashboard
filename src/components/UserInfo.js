@@ -1,5 +1,15 @@
 import React from "react";
-import { Box, Paper, Typography, Button, Avatar, Menu, MenuItem, Divider } from "@mui/material";
+import { 
+  Box, 
+  Paper, 
+  Typography, 
+  Button, 
+  Avatar, 
+  Menu, 
+  MenuItem, 
+  Divider,
+  ListItemIcon 
+} from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import { Logout, AccountCircle, Preview } from "@mui/icons-material";
 import image from "../asset/dmsc-logo2.png";
@@ -36,48 +46,7 @@ const UserInfo = () => {
         gap: 2,
       }}
     >
-      {/* Preview Page Button */}
-      <Button
-        component={Link}
-        to="/preview-page"
-        startIcon={<Preview />}
-        sx={{
-          textTransform: "none",
-          color: "white",
-          backgroundColor: "primary.main",
-          px: 2,
-          py: 1,
-          borderRadius: "8px",
-          "&:hover": {
-            backgroundColor: "primary.dark",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-          },
-        }}
-      >
-        Preview / Export
-      </Button>
-
-      <Button
-        component={Link}
-        to="/data-manage"
-        startIcon={<Preview />}
-        sx={{
-          textTransform: "none",
-          color: "white",
-          backgroundColor: "primary.main",
-          px: 2,
-          py: 1,
-          borderRadius: "8px",
-          "&:hover": {
-            backgroundColor: "primary.dark",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-          },
-        }}
-      >
-        Data Manage
-      </Button>
-
-      {/* User Profile */}
+      {/* User Profile Button */}
       <Paper
         elevation={0}
         sx={{
@@ -92,10 +61,12 @@ const UserInfo = () => {
           "&:hover": {
             boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.15)",
           },
+          transition: "box-shadow 0.3s ease",
         }}
         onClick={handleMenuOpen}
+        aria-haspopup="true"
+        aria-controls="user-menu"
       >
-        {/* Logo */}
         <Avatar
           src={image}
           alt="Logo"
@@ -106,7 +77,6 @@ const UserInfo = () => {
           }}
         />
 
-        {/* User Info */}
         <Box sx={{ textAlign: "left" }}>
           <Typography
             variant="subtitle2"
@@ -133,8 +103,9 @@ const UserInfo = () => {
         </Box>
       </Paper>
 
-      {/* Dropdown Menu */}
+      {/* User Menu */}
       <Menu
+        id="user-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleMenuClose}
@@ -142,33 +113,75 @@ const UserInfo = () => {
           elevation: 3,
           sx: {
             mt: 1.5,
-            minWidth: 200,
+            minWidth: 220,
             borderRadius: "12px",
             overflow: "hidden",
-            "& .MuiMenuItem-root": {
-              fontSize: "0.875rem",
-            },
+            py: 0.5,
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem disabled>
-          <Box sx={{ display: "flex", alignItems: "center", px: 1 }}>
-            <AccountCircle sx={{ mr: 1.5, color: "text.secondary" }} />
-            <Typography variant="body2" color="text.secondary">
-              User Profile
-            </Typography>
-          </Box>
+        {/* User Info Section */}
+        <MenuItem disabled sx={{ opacity: 1 }}>
+          <ListItemIcon>
+            <AccountCircle color="disabled" />
+          </ListItemIcon>
+          <Typography variant="body2" color="text.secondary">
+          {fullname}
+          </Typography>
         </MenuItem>
+
+        {/* Action Buttons Section */}
+        <Box sx={{ px: 1.5, py: 1 }}>
+          <Button
+            fullWidth
+            component={Link}
+            to="/preview-page"
+            startIcon={<Preview />}
+            variant="contained"
+            sx={{
+              textTransform: "none",
+              mb: 1,
+              borderRadius: "8px",
+              boxShadow: "none",
+              "&:hover": {
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+              },
+            }}
+          >
+            Preview / Export
+          </Button>
+
+          <Button
+            fullWidth
+            component={Link}
+            to="/data-manage"
+            startIcon={<Preview />}
+            variant="contained"
+            sx={{
+              textTransform: "none",
+              borderRadius: "8px",
+              boxShadow: "none",
+              "&:hover": {
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+              },
+            }}
+          >
+            Data Manage
+          </Button>
+        </Box>
+
         <Divider sx={{ my: 0.5 }} />
+
+        {/* Logout Section */}
         <MenuItem onClick={handleLogout}>
-          <Box sx={{ display: "flex", alignItems: "center", px: 1 }}>
-            <Logout sx={{ mr: 1.5, color: "error.main" }} />
-            <Typography variant="body2" color="error">
-              Logout
-            </Typography>
-          </Box>
+          <ListItemIcon>
+            <Logout color="error" />
+          </ListItemIcon>
+          <Typography variant="body2" color="error">
+            Logout
+          </Typography>
         </MenuItem>
       </Menu>
     </Box>

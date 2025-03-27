@@ -20,6 +20,7 @@ import {
   FormControl,
   Backdrop,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import { convertToStrainsNameFormat } from "./StrainsNameFormat";
 import UserInfo from "./UserInfo";
@@ -64,14 +65,32 @@ const labs = [
   "ศวก. 12-1",
 ];
 
-const months = ["2024-10","2024-11","2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05"];
+const months = [
+  "2024-10",
+  "2024-11",
+  "2024-12",
+  "2025-01",
+  "2025-02",
+  "2025-03",
+  "2025-04",
+  "2025-05",
+];
+
+// ฟังก์ชันแบ่ง strains เป็นกลุ่มๆ ละ 3 สายพันธุ์
+const chunkArray = (array, size) => {
+  const result = [];
+  for (let i = 0; i < array.length; i += size) {
+    result.push(array.slice(i, i + size));
+  }
+  return result;
+};
 
 const InsertData = () => {
   const [month, setMonth] = useState("");
   const [lab, setLab] = useState("");
   const [totalSamples, setTotalSamples] = useState("");
   const [casesData, setCasesData] = useState({});
-  const [loading, setLoading] = useState(false); // สำหรับเช็คสถานะการโหลดข้อมูล
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (month && lab) {
@@ -88,8 +107,8 @@ const InsertData = () => {
         }
         setLoading(false);
       });
-  
-      return () => unsubscribe(); 
+
+      return () => unsubscribe();
     }
   }, [month, lab]);
 
@@ -104,7 +123,7 @@ const InsertData = () => {
     e.preventDefault();
     if (!lab || !totalSamples || !month) return;
 
-    setLoading(true); // เริ่มบันทึกข้อมูล
+    setLoading(true);
 
     const totalStrains = Object.values(casesData).reduce(
       (sum, value) => sum + (parseInt(value) || 0),
@@ -119,122 +138,122 @@ const InsertData = () => {
       ...casesData,
     };
 
-    // บันทึกข้อมูลลง Firebase
     await setDoc(labRef, dataToSave);
 
-    setLab(""); // รีเซ็ตค่า lab
-    setTotalSamples(""); // รีเซ็ตค่า totalSamples
-    setCasesData({}); // รีเซ็ตข้อมูลสายพันธุ์ HPV
-    setMonth(""); // รีเซ็ตเดือนหลังจากส่งข้อมูล
+    setLab("");
+    setTotalSamples("");
+    setCasesData({});
+    setMonth("");
 
-    setLoading(false); // เสร็จสิ้นการบันทึกข้อมูล
+    setLoading(false);
   };
 
+  // แบ่ง strains เป็นกลุ่มๆ ละ 3 สายพันธุ์
+  const strainGroups = chunkArray(strains, 6);
+
   return (
-    <Container>
-      <UserInfo />
-      <br />
-      <Typography variant="h6" gutterBottom>
-        เพิ่ม/แก้ไข ข้อมูลการตรวจหาเชื้อ
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        {/* เลือกเดือน */}
-        <FormControl fullWidth margin="normal">
-          <InputLabel>เลือกเดือน</InputLabel>
-          <Select
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            label="เลือกเดือน"
+    <>
+      <Container>
+        <UserInfo />
+        <Typography variant="h6" gutterBottom>
+          เพิ่ม/แก้ไข ข้อมูลการตรวจหาเชื้อ
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Box mb={1}>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>เลือกเดือน</InputLabel>
+              <Select
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+                label="เลือกเดือน"
+                fullWidth
+              >
+                {months.map((monthItem) => (
+                  <MenuItem key={monthItem} value={monthItem}>
+                    {monthItem}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          
+          <TextField
+            select
+            label="เลือก Lab"
+            value={lab}
+            onChange={(e) => setLab(e.target.value)}
             fullWidth
+            margin="normal"
           >
-            {months.map((monthItem) => (
-              <MenuItem key={monthItem} value={monthItem}>
-                {monthItem}
+            {labs.map((labItem) => (
+              <MenuItem key={labItem} value={labItem}>
+                {labItem}
               </MenuItem>
             ))}
-          </Select>
-        </FormControl>
+          </TextField>
 
-        {/* เลือก Lab */}
-        <TextField
-          select
-          label="เลือก Lab"
-          value={lab}
-          onChange={(e) => setLab(e.target.value)}
-          fullWidth
-          margin="normal"
+          <TextField
+            label="กรอกตัวอย่างทั้งหมด"
+            type="number"
+            value={totalSamples}
+            onChange={(e) => setTotalSamples(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 1 }}>
+            กรอกข้อมูลสายพันธุ์ HPV
+          </Typography>
+          
+          {/* แสดงผลแบบ 3 คอลัมน์ */}
+          <Grid container spacing={2}>
+            {strainGroups.map((group, groupIndex) => (
+              <Grid item xs={12} md={4} key={groupIndex}>
+                <TableContainer component={Paper}>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>สายพันธุ์ HPV</TableCell>
+                        <TableCell align="center">จำนวน</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {group.map((strain) => (
+                        <TableRow key={strain}>
+                          <TableCell>{convertToStrainsNameFormat(strain)}</TableCell>
+                          <TableCell align="center">
+                            <TextField
+                              type="number"
+                              value={casesData[strain] || ""}
+                              onChange={(e) => handleChangeCases(strain, e.target.value)}
+                              size="small"
+                              sx={{ width: "100px" }}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
+            ))}
+          </Grid>
+
+          <Box mt={1} mb={1}>
+            <Button type="submit" variant="contained" color="primary" size="large">
+              บันทึกข้อมูล
+            </Button>
+          </Box>
+        </form>
+
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
         >
-          {labs.map((labItem) => (
-            <MenuItem key={labItem} value={labItem}>
-              {labItem}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        {/* กรอกตัวอย่างทั้งหมด */}
-        <TextField
-          label="กรอกตัวอย่างทั้งหมด"
-          type="number"
-          value={totalSamples}
-          onChange={(e) => setTotalSamples(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-
-        <Typography variant="h6" gutterBottom>
-          กรอกข้อมูลสายพันธุ์ HPV
-        </Typography>
-        <TableContainer
-          component={Paper}
-          sx={{ maxWidth: "100%", margin: "auto" }}
-        >
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>สายพันธุ์ HPV</TableCell>
-                <TableCell align="center">จำนวนตัวอย่าง</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {strains.map((strain) => (
-                <TableRow key={strain}>
-                  <TableCell>{convertToStrainsNameFormat(strain)}</TableCell>
-                  <TableCell align="center">
-                    <TextField
-                      label="จำนวน"
-                      type="number"
-                      value={casesData[strain] || ""}
-                      onChange={(e) =>
-                        handleChangeCases(strain, e.target.value)
-                      }
-                      size="small"
-                      sx={{ width: "120px" }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        <Box mt={3} mb={5}>
-          <Button type="submit" variant="contained" color="primary">
-            บันทึกข้อมูล
-          </Button>
-        </Box>
-      </form>
-
-      {/* การแสดง Backdrop และ CircularProgress */}
-      <Backdrop
-        sx={{
-          color: "#fff",
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-        }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </Container>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </Container>
+    </>
   );
 };
 
