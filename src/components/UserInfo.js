@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import { Logout, AccountCircle, Preview } from "@mui/icons-material";
+import AddchartTwoToneIcon from '@mui/icons-material/AddchartTwoTone';
 import image from "../asset/dmsc-logo2.png";
 
 const UserInfo = () => {
@@ -157,7 +158,7 @@ const UserInfo = () => {
             fullWidth
             component={Link}
             to="/data-manage"
-            startIcon={<Preview />}
+            startIcon={<AddchartTwoToneIcon />}
             variant="contained"
             sx={{
               textTransform: "none",
