@@ -12,6 +12,7 @@ import HeadBar from "./components/HeadBar";
 import Login from "./components/Login";
 import TopFiveStrains from "./components/TopFiveStrains";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PreviewPage from "./pages/PreviewPage";
 
 const theme = createTheme({
   typography: { fontFamily: "K2D, sans-serif" },
@@ -28,7 +29,9 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
         <HeadBar />
         <Box sx={{ flexGrow: 1, p: 2 }}>
           <Routes>
@@ -64,6 +67,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/preview-page" element={<PreviewPage />} />
           </Routes>
         </Box>
       </Box>
