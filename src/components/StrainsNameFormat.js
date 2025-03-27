@@ -23,6 +23,4 @@ export const strains = [
     return strain.replace(/_/g, " ").replace(/HPV/g, "HPV ");
   };
   
-  // ตัวอย่างการใช้งาน
-  const formattedStrains = strains.map(convertToStrainsNameFormat);
   

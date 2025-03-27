@@ -23,6 +23,8 @@ import {
   LabelList,
 } from "recharts";
 import { convertToStrainsNameFormat } from "../components/StrainsNameFormat";
+import { convertToThaiDate } from "../components/MonthsTH";
+import { convertToRMScNameFormat } from "../components/RMScNameFormat";
 
 const strains = [
   "Multiple_HPV_16_18",
@@ -185,7 +187,7 @@ const StrainsChart = () => {
             <Select value={selectedMonth} onChange={handleMonthChange} label="เลือกเดือน">
               {months.map((month) => (
                 <MenuItem key={month} value={month}>
-                  {month}
+                  {convertToThaiDate(month)}
                 </MenuItem>
               ))}
             </Select>
@@ -197,7 +199,7 @@ const StrainsChart = () => {
             <Select value={selectedLab} onChange={handleLabChange} label="เลือกหน่วยงาน">
               {labs.map((lab) => (
                 <MenuItem key={lab} value={lab}>
-                  {lab}
+                  {convertToRMScNameFormat(lab)}
                 </MenuItem>
               ))}
             </Select>

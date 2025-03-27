@@ -13,6 +13,8 @@ import Login from "./components/Login";
 import TopFiveStrains from "./components/TopFiveStrains";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PreviewPage from "./pages/PreviewPage";
+import NotFound from "./components/NotFound";
+
 
 const theme = createTheme({
   typography: { fontFamily: "K2D, sans-serif" },
@@ -67,7 +69,11 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
             <Route path="/preview-page" element={<PreviewPage />} />
+            {/* เพิ่ม Route สำหรับหน้าที่ไม่พบ */}
+            <Route path="*" element={<NotFound />} />
+
           </Routes>
         </Box>
       </Box>

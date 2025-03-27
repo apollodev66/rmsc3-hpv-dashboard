@@ -19,6 +19,8 @@ import {
   Grid,
 } from "@mui/material";
 import { convertToStrainsNameFormat } from "../components/StrainsNameFormat";
+import { convertToThaiDate } from "../components/MonthsTH";
+import { convertToRMScNameFormat } from "../components/RMScNameFormat";
 
 const strains = [
   "Multiple_HPV_16_18",
@@ -173,7 +175,7 @@ const StrainsTable = () => {
             >
               {months.map((month) => (
                 <MenuItem key={month} value={month}>
-                  {month}
+                  {convertToThaiDate(month)}
                 </MenuItem>
               ))}
             </Select>
@@ -189,7 +191,7 @@ const StrainsTable = () => {
             >
               {labs.map((lab) => (
                 <MenuItem key={lab} value={lab}>
-                  {lab}
+                  {convertToRMScNameFormat(lab)}
                 </MenuItem>
               ))}
             </Select>
