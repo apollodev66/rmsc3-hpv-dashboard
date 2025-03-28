@@ -160,7 +160,7 @@ const InsertData = () => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <Box mb={1}>
-            <FormControl fullWidth margin="normal">
+            <FormControl fullWidth size="small">
               <InputLabel>เลือกเดือน</InputLabel>
               <Select
                 value={month}
@@ -184,6 +184,8 @@ const InsertData = () => {
             onChange={(e) => setLab(e.target.value)}
             fullWidth
             margin="normal"
+            size="small" 
+            sx={{ display: "flex", gap: 1, mb: 1, alignItems: "center" }}
           >
             {labs.map((labItem) => (
               <MenuItem key={labItem} value={labItem}>
@@ -199,6 +201,8 @@ const InsertData = () => {
             onChange={(e) => setTotalSamples(e.target.value)}
             fullWidth
             margin="normal"
+            size="small" 
+            sx={{ display: "flex", gap: 1, mb: 1, alignItems: "center" }}
           />
 
           <Typography variant="h6" gutterBottom sx={{ mt: 1 }}>
