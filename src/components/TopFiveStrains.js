@@ -97,7 +97,6 @@ const colors = {
   SINGLE_68: "#7bb7e2",
 };
 
-// ฟังก์ชันสร้างข้อมูลสำหรับกราฟโดนัท
 const prepareDonutData = (data) => {
   return data.map((item) => ({
     name: convertToStrainsNameFormat(item.name),
@@ -106,12 +105,40 @@ const prepareDonutData = (data) => {
   }));
 };
 
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  name
+}) => {
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 1.2; // ปรับระยะห่างจากกราฟ
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="#333"
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline="central"
+      fontSize={10} // ปรับขนาดตัวหนังสือที่นี่
+    >
+      {`${name} (${(percent * 100).toFixed(0)}%)`}
+    </text>
+  );
+};
+
 const TopFiveStrains = () => {
   const [dataTotal, setDataTotal] = useState([]);
   const [dataMonth, setDataMonth] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(months[0]);
   const [loading, setLoading] = useState(false);
-  const [viewMode, setViewMode] = useState("bar"); // 'bar', 'list', หรือ 'pie'
+  const [viewMode, setViewMode] = useState("bar");
 
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
@@ -172,7 +199,6 @@ const TopFiveStrains = () => {
     fetchData();
   }, [selectedMonth]);
 
-  // เตรียมข้อมูลสำหรับกราฟโดนัท
   const donutDataMonth = prepareDonutData(dataMonth);
   const donutDataTotal = prepareDonutData(dataTotal);
 
@@ -334,22 +360,35 @@ const TopFiveStrains = () => {
                           data={donutDataMonth}
                           cx="50%"
                           cy="50%"
+                          label={renderCustomizedLabel}
                           labelLine={false}
                           outerRadius={80}
                           innerRadius={40}
                           fill="#8884d8"
                           dataKey="value"
                           nameKey="name"
-                          label={({ name, percent }) =>
-                            `${name} ${(percent * 100).toFixed(0)}%`
-                          }
                         >
                           {donutDataMonth.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip />
-                        <Legend />
+                        <Tooltip 
+                          contentStyle={{ 
+                            fontSize: '12px',
+                            padding: '8px'
+                          }}
+                          formatter={(value, name, props) => [
+                            value, 
+                            convertToStrainsNameFormat(props.payload.name)
+                          ]}
+                        />
+                        <Legend 
+                          wrapperStyle={{
+                            fontSize: '12px',
+                            paddingTop: '20px'
+                          }}
+                          formatter={(value) => convertToStrainsNameFormat(value)}
+                        />
                       </PieChart>
                     </ResponsiveContainer>
                   </Box>
@@ -366,7 +405,12 @@ const TopFiveStrains = () => {
                           tickFormatter={convertToStrainsNameFormat}
                         />
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip 
+                          formatter={(value, name, props) => [
+                            value, 
+                            convertToStrainsNameFormat(props.payload.name)
+                          ]}
+                        />
                         <Bar dataKey="value">
                           {dataMonth.map((entry, index) => (
                             <Cell
@@ -379,6 +423,7 @@ const TopFiveStrains = () => {
                             position="top"
                             fill="#000"
                             fontSize={12}
+                            formatter={(value) => value}
                           />
                         </Bar>
                       </BarChart>
@@ -421,7 +466,7 @@ const TopFiveStrains = () => {
                       size="small"
                       aria-label="ตารางแสดงผลลัพธ์"
                     >
-                       <TableHead>
+                      <TableHead>
                         <TableRow>
                           <TableCell
                             sx={{
@@ -474,22 +519,35 @@ const TopFiveStrains = () => {
                           data={donutDataTotal}
                           cx="50%"
                           cy="50%"
+                          label={renderCustomizedLabel}
                           labelLine={false}
                           outerRadius={80}
                           innerRadius={40}
                           fill="#8884d8"
                           dataKey="value"
                           nameKey="name"
-                          label={({ name, percent }) =>
-                            `${name} ${(percent * 100).toFixed(0)}%`
-                          }
                         >
                           {donutDataTotal.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip />
-                        <Legend />
+                        <Tooltip 
+                          contentStyle={{ 
+                            fontSize: '12px',
+                            padding: '8px'
+                          }}
+                          formatter={(value, name, props) => [
+                            value, 
+                            convertToStrainsNameFormat(props.payload.name)
+                          ]}
+                        />
+                        <Legend 
+                          wrapperStyle={{
+                            fontSize: '12px',
+                            paddingTop: '20px'
+                          }}
+                          formatter={(value) => convertToStrainsNameFormat(value)}
+                        />
                       </PieChart>
                     </ResponsiveContainer>
                   </Box>
@@ -506,7 +564,12 @@ const TopFiveStrains = () => {
                           tickFormatter={convertToStrainsNameFormat}
                         />
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip 
+                          formatter={(value, name, props) => [
+                            value, 
+                            convertToStrainsNameFormat(props.payload.name)
+                          ]}
+                        />
                         <Bar dataKey="value">
                           {dataTotal.map((entry, index) => (
                             <Cell
@@ -519,6 +582,7 @@ const TopFiveStrains = () => {
                             position="top"
                             fill="#000"
                             fontSize={12}
+                            formatter={(value) => value}
                           />
                         </Bar>
                       </BarChart>

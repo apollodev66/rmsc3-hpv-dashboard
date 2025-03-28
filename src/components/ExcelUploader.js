@@ -213,18 +213,17 @@ const ExcelUploader = () => {
   return (
     <>
       <Container>
-        <Typography variant="h6" gutterBottom>
-          อัพโหลดข้อมูลจากไฟล์ Excel
-        </Typography>
-        <form onSubmit={handlePreview}>
-          <Box mb={2}>
-            <FormControl fullWidth margin="normal">
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            อัพโหลดข้อมูลจากไฟล์ Excel
+          </Typography>
+          <form onSubmit={handlePreview}>
+            <FormControl fullWidth size="small" sx={{ mb: 1 }}>
               <InputLabel>เลือกเดือน</InputLabel>
               <Select
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
                 label="เลือกเดือน"
-                fullWidth
               >
                 {months.map((monthItem) => (
                   <MenuItem key={monthItem} value={monthItem}>
@@ -233,68 +232,77 @@ const ExcelUploader = () => {
                 ))}
               </Select>
             </FormControl>
-          </Box>
 
-          <Box mb={2}>
-            <input
-              type="file"
-              accept=".xlsx, .xls"
-              onChange={handleFileUpload}
-              style={{ display: "none" }}
-              id="upload-file"
-            />
-            <label htmlFor="upload-file">
-              <Button
-                variant="contained"
-                component="span"
-                sx={{ marginRight: 2 }}
-              >
-                อัพโหลดไฟล์ Excel
-              </Button>
-            </label>
+            <Box sx={{ display: "flex", gap: 1, mb: 1, alignItems: "center" }}>
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                onChange={handleFileUpload}
+                style={{ display: "none" }}
+                id="upload-file"
+              />
+              <label htmlFor="upload-file">
+                <Button variant="contained" component="span" size="small">
+                  อัพโหลดไฟล์ Excel
+                </Button>
+              </label>
 
-            {/* Button to download the template file */}
-            <a href="/asset/template/hpv_template.xlsx" download>
               <Button
                 variant="contained"
                 color="secondary"
-                component="span"
-                sx={{ marginLeft: 2 }}
+                size="small"
+                component="a"
+                href="/asset/template/hpv_template.xlsx"
+                download
               >
-                ดาวน์โหลดไฟล์เทมเพลต Excel
+                ดาวน์โหลดเทมเพลต
               </Button>
-            </a>
+            </Box>
 
-            {file && <Typography variant="body1">{file.name}</Typography>}
-          </Box>
+            {file && (
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                {file.name}
+              </Typography>
+            )}
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            disabled={!file || !month}
-          >
-            แสดงตัวอย่างข้อมูล
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              disabled={!file || !month}
+              size="small"
+              fullWidth
+            >
+              แสดงตัวอย่างข้อมูล
+            </Button>
+          </form>
+        </Box>
       </Container>
 
       {previewData.length > 0 && (
-        <Box sx={{ width: "100%", overflowX: "auto" }}>
-          <Typography variant="h6" mt={4} mb={2} sx={{ textAlign: "center" }}>
+        <Box sx={{ maxWidth: "90%", margin: "0 auto", overflowX: "auto" }}>
+          <Typography
+            variant="subtitle1"
+            mt={2}
+            mb={1}
+            sx={{ textAlign: "center" }}
+          >
             ตัวอย่างข้อมูล
           </Typography>
-          <TableContainer
-            component={Paper}
-            sx={{ maxWidth: "100%", overflowX: "auto" }}
-          >
-            <Table>
+          <TableContainer component={Paper} sx={{ maxHeight: 450 }}>
+            <Table size="small" stickyHeader>
               <TableHead>
                 <TableRow>
-                  {/* Add column for Strains */}
-                  <TableCell>สายพันธุ์</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>สายพันธุ์</TableCell>
                   {previewData.map(({ lab }) => (
-                    <TableCell key={lab} sx={{ textAlign: "center" }}>
+                    <TableCell
+                      key={lab}
+                      sx={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        padding: "8px",
+                      }}
+                    >
                       {lab}
                     </TableCell>
                   ))}
@@ -302,26 +310,32 @@ const ExcelUploader = () => {
               </TableHead>
               <TableBody>
                 {strains.map((strain) => (
-                  <TableRow key={strain}>
-                    {/* Add row for each strain */}
-                    <TableCell>{strain}</TableCell>
+                  <TableRow key={strain} hover>
+                    <TableCell sx={{ padding: "8px" }}>{strain}</TableCell>
                     {previewData.map(({ lab, casesData }) => (
                       <TableCell
                         key={`${lab}-${strain}`}
                         onClick={() => handleCellClick(lab, strain)}
-                        sx={{ textAlign: "center" }}
+                        sx={{
+                          textAlign: "center",
+                          padding: "8px",
+                          cursor: "pointer",
+                          "&:hover": { backgroundColor: "#f5f5f5" },
+                        }}
                       >
                         {editingCell?.lab === lab &&
                         editingCell?.strain === strain ? (
                           <TextField
                             variant="outlined"
                             type="number"
+                            size="small"
                             value={casesData[strain]}
                             onChange={(e) =>
                               handleChange(lab, strain, e.target.value)
                             }
                             fullWidth
                             autoFocus
+                            sx={{ maxWidth: "80px" }}
                           />
                         ) : (
                           casesData[strain]
@@ -334,8 +348,14 @@ const ExcelUploader = () => {
             </Table>
           </TableContainer>
 
-          <Box mt={3} sx={{ textAlign: "center" }}>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Box mt={2} sx={{ textAlign: "center" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+              size="small"
+              sx={{ padding: "4px 16px" }}
+            >
               บันทึกข้อมูล
             </Button>
           </Box>

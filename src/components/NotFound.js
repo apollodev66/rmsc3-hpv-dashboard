@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
-import { Box, Typography, Button, Container } from "@mui/material";
+import { Box, Typography, Button, Container, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
-import animationData from "../asset/404-animation.json"; // ไฟล์อนิเมชัน Lottie
+import animationData from "../asset/404-animation.json";
 
 const NotFound = () => {
   useEffect(() => {
-    // บันทึกการเข้าถึงหน้าผิดพลาด (สามารถเชื่อมกับ analytics ในอนาคต)
     console.log('User accessed non-existent route:', window.location.pathname);
   }, []);
 
@@ -38,27 +37,55 @@ const NotFound = () => {
           </Box>
 
           <Typography variant="h3" gutterBottom>
-            404 - Not Found
+            อ๊ะๆ ดูเหมือนคุณจะหลงทาง
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
             หน้าที่คุณกำลังมองหาอาจถูกลบ เปลี่ยนชื่อ หรือไม่มีอยู่ชั่วคราว
           </Typography>
           
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              component={RouterLink}
-              to="/"
-              size="large"
-              sx={{ borderRadius: 2 }}
-            >
-              กลับสู่หน้าหลัก
-            </Button>
-          </motion.div>
+          <Stack direction="column" spacing={2} sx={{ width: '100%', maxWidth: 400 }}>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                component={RouterLink}
+                to="/"
+                size="large"
+                fullWidth
+                sx={{ borderRadius: 2 }}
+              >
+                กลับสู่หน้าหลัก
+              </Button>
+            </motion.div>
+
+            <Typography variant="body2" color="text.secondary">
+              หรือไปที่หน้าอื่น
+            </Typography>
+
+            <Stack direction="row" spacing={2} justifyContent="center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/data-manage"
+                  sx={{ borderRadius: 2 }}
+                >
+                  จัดการข้อมูล
+                </Button>
+              </motion.div>
+              
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/preview-page"
+                  sx={{ borderRadius: 2 }}
+                >
+                  ตัวอย่างข้อมูล
+                </Button>
+              </motion.div>
+            </Stack>
+          </Stack>
         </Box>
       </motion.div>
     </Container>
