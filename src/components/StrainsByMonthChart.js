@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const months = ["2025-02", "2025-03", "2025-04", "2025-05"]; // ตัวอย่างเดือนที่สามารถเลือกได้
+const months = ["2025-02", "2025-03", "2025-04", "2025-05","2025-04"];
 
 const StrainsByMonthChart = () => {
   const [data, setData] = useState([]);

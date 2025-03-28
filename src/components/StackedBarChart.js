@@ -20,7 +20,7 @@ const StackedBarChart = () => {
   const [selectedMonth, setSelectedMonth] = useState("ทั้งหมด");
   const [loading, setLoading] = useState(false);
 
-  const months = ["ทั้งหมด", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03"];
+  const months = ["ทั้งหมด", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03","2025-04"];
   
   const labOrder = [
     "ศวก. 1", "ศวก. 1-1", "ศวก. 2", "ศวก. 3", "ศวก. 4", "ศวก. 5",
